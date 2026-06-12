@@ -20,8 +20,9 @@ app.config["SESSION_COOKIE_SECURE"] = False  # keep False for local
 # ------------------ DB CONNECTION ------------------
 
 try:
+    MONGO_URI = os.getenv("MONGO_URI")
     mongo_client = MongoClient(
-        "mongodb+srv://smksnk:methun%402007@cluster0.sx2akqk.mongodb.net/agrinexus_db?retryWrites=true&w=majority",
+        MONGO_URI,
         serverSelectionTimeoutMS=5000
     )
     mongo_client.admin.command('ping')
@@ -34,9 +35,11 @@ except Exception as e:
 # ------------------ TWILIO CONFIG ------------------
 
 # ⚠️ Use environment variables in real deployment
-account_sid = os.getenv("TWILIO_SID", "ACe12ed6ba4837e137ff05ed02535a63c5")
-auth_token = os.getenv("TWILIO_AUTH", "c014d4a710fe528550d40cb4cef46cac")
-twilio_number = "+1 385 403 8753"
+
+
+account_sid = os.getenv("TWILIO_SID")
+auth_token = os.getenv("TWILIO_AUTH")
+twilio_number = os.getenv("TWILIO_NUMBER")
 
 client_twilio = Client(account_sid, auth_token)
 
@@ -273,4 +276,7 @@ def home():
 # ------------------ RUN ------------------
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 5000))
+    )
