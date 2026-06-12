@@ -272,7 +272,13 @@ def market_prices():
 @app.route("/")
 def home():
     return send_file("index.html")
+@app.route('/css/<path:filename>')
+def css_files(filename):
+    return send_from_directory('css', filename)
 
+@app.route('/js/<path:filename>')
+def js_files(filename):
+    return send_from_directory('js', filename)
 # ------------------ RUN ------------------
 
 if __name__ == "__main__":
