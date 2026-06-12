@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AGRINEXUS - Smart Farming Assistant</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode:"class",
+  theme:{
+    extend:{
+      colors:{
+        "outline":"#717973","primary-fixed-dim":"#a5d0b9","on-tertiary":"#ffffff",
+        "surface-container-lowest":"#ffffff","surface-dim":"#d9dad9","secondary":"#116c4a",
+        "surface-variant":"#e1e3e2","on-surface-variant":"#414844","tertiary":"#3a2017",
+        "on-surface":"#191c1c","secondary-fixed":"#a1f4c8","on-error-container":"#93000a",
+        "inverse-on-surface":"#f0f1f0","surface":"#f9f9f8","primary":"#012d1d",
+        "error":"#ba1a1a","secondary-fixed-dim":"#86d7ad","on-tertiary-container":"#c79d90",
+        "inverse-surface":"#2e3131","surface-container-highest":"#e1e3e2",
+        "tertiary-fixed":"#ffdbcf","surface-tint":"#3f6653","surface-container-low":"#f3f4f3",
+        "on-secondary-fixed":"#002113","on-secondary-container":"#1b724f",
+        "inverse-primary":"#a5d0b9","on-primary":"#ffffff","surface-container":"#edeeed",
+        "secondary-container":"#a1f4c8","on-error":"#ffffff","on-primary-container":"#86af99",
+        "error-container":"#ffdad6","background":"#f9f9f8","on-tertiary-fixed":"#2d150d",
+        "on-secondary":"#ffffff","primary-fixed":"#c1ecd4","on-background":"#191c1c",
+        "tertiary-fixed-dim":"#e9bdae","on-primary-fixed":"#002114",
+        "on-secondary-fixed-variant":"#005236","surface-bright":"#f9f9f8",
+        "tertiary-container":"#52352b","primary-container":"#1b4332",
+        "outline-variant":"#c1c8c2","surface-container-high":"#e7e8e7"
+      },
+      fontFamily:{"headline":["Manrope"],"body":["Inter"],"label":["Inter"]},
+      borderRadius:{"DEFAULT":"1rem","lg":"2rem","xl":"3rem","full":"9999px"},
+    }
+  }
+}
+</script>
+<link rel="stylesheet" href="css/style.css"/>
+</head>
+<!-- TOP NAV -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4 glass-nav">
+  <div class="flex items-center gap-8">
+    <span onclick="openScreen('screen-home')" class="font-headline font-black tracking-tighter text-primary text-2xl uppercase cursor-pointer">AGRINEXUS</span>
+    <nav class="hidden md:flex items-center gap-2">
+      <button onclick="setLanguage('en')" id="btn-lang-en" class="text-primary font-bold font-label text-sm px-4 py-1 rounded-full transition-all">English</button>
+      <button onclick="setLanguage('ta')" id="btn-lang-ta" class="text-on-surface opacity-60 font-label text-sm px-4 py-1 rounded-full hover:bg-surface-container transition-all">தமிழ்</button>
+    </nav>
+  </div>
+  <div id="nav-logout-btn" class="flex items-center gap-3">
+    <span class="text-xs font-semibold text-on-surface-variant" id="nav-farmer-name"></span>
+    <button onclick="logoutFarmer()" class="bg-surface-container text-primary px-5 py-2 rounded-full font-bold text-sm hover:bg-surface-container-high transition-all font-label">Logout</button>
+  </div>
+</header>
+
+<!-- TOAST -->
+<div  class="toast" id="toast"></div>
+
+<!-- SCREENS WRAPPER -->
+<div class="full" style="padding-top:72px;">
+
+<!-- =================== HOME =================== -->
+<section id="screen-home" class="screen active">
+  <!-- Hero -->
+  <div class="relative h-[420px] md:h-[480px] overflow-hidden group">
+    <div class="absolute inset-0 bg-gradient-to-r from-primary/85 to-primary/20 z-10"></div>
+    <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+      src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=1200&q=80" alt="Farm field"/>
+    <div class="relative z-20 h-full flex flex-col justify-center px-8 md:px-16 max-w-3xl">
+      <span class="text-secondary-fixed font-bold tracking-widest text-xs uppercase mb-4 block" data-lang="welcome">Smart Agriculture Solutions</span>
+      <h1 class="font-headline font-extrabold text-4xl md:text-5xl text-white tracking-tight leading-tight mb-5">
+        Welcome to <span class="text-secondary-fixed">AGRINEXUS</span>
+      </h1>
+      <p class="text-white/75 text-base md:text-lg mb-8 leading-relaxed font-light">
+        Empowering farmers with real-time data, market insights, and sustainable cultivation techniques.
+      </p>
+      <div class="flex gap-4 flex-wrap">
+        <button onclick="openScreen('screen-buyer-view')" class="bg-white/10 backdrop-blur-md text-white border border-white/20 px-8 py-3 rounded-full font-bold hover:bg-white/20 transition-colors" data-lang="buyer_view">Buyer View</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bento Grid -->
+  <div  class="px-6 md:px-12 py-10 max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5">
+
+      <!-- Buyer View -->
+      <div onclick="openScreen('screen-buyer-view')" class="bg-surface-container-low p-8 rounded-lg bento-card flex flex-col justify-between cursor-pointer hover:bg-surface-container">
+        <div>
+          <div class="bg-tertiary-fixed w-12 h-12 rounded-full flex items-center justify-center mb-5">
+            <span class="material-symbols-outlined text-on-tertiary-fixed">shopping_basket</span>
+          </div>
+          <h3 class="font-headline text-xl font-bold mb-2" data-lang="buyer_view">Buyer View</h3>
+          <p class="text-on-surface-variant text-sm">Direct source fresh produce from local farms at competitive wholesale prices.</p>
+        </div>
+        <span class="material-symbols-outlined self-end text-primary opacity-40">launch</span>
+      </div>
+
+      <!-- Market Prices -->
+      <div onclick="openScreen('screen-market')" class="bg-surface-container-lowest p-8 rounded-lg bento-card flex flex-col justify-between shadow-sm hover:shadow-md cursor-pointer transition-shadow">
+        <div>
+          <div class="bg-secondary-container w-12 h-12 rounded-full flex items-center justify-center mb-5">
+            <span class="material-symbols-outlined text-on-secondary-container">trending_up</span>
+          </div>
+          <h3 class="font-headline text-xl font-bold mb-2" data-lang="market_price">Market Prices</h3>
+          <p class="text-on-surface-variant text-sm">Live updates on commodity rates across all major mandis and markets.</p>
+        </div>
+        <div class="mt-4 py-2 border-t border-outline-variant/20 flex justify-between items-center">
+          <span class="text-xs font-bold text-secondary uppercase">Live Now</span>
+          <span class="w-2 h-2 bg-secondary rounded-full pulse-dot"></span>
+        </div>
+      </div>
+
+      <!-- Weather -->
+      <div onclick="openScreen('screen-weather')" class="bg-surface-container p-8 rounded-lg bento-card flex flex-col justify-between cursor-pointer">
+        <div>
+          <div class="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mb-5">
+            <span class="material-symbols-outlined text-blue-800">thunderstorm</span>
+          </div>
+          <h3 class="font-headline text-xl font-bold mb-2" data-lang="weather_advisory">Weather Advisory</h3>
+          <p class="text-on-surface-variant text-sm">7-day hyper-local forecasts and crop-specific alerts for your region.</p>
+        </div>
+        <div class="flex items-center gap-2 mt-4">
+          <span class="text-2xl font-bold text-primary">28°C</span>
+          <span class="text-xs text-on-surface-variant opacity-60">Partly Cloudy</span>
+        </div>
+      </div>
+
+      <!-- Paddy Guide -->
+      <div onclick="openScreen('screen-paddy-guide')" class="bg-surface-container-low p-8 rounded-lg bento-card flex flex-col justify-between cursor-pointer hover:bg-surface-container">
+        <div>
+          <div class="bg-primary-fixed w-12 h-12 rounded-full flex items-center justify-center mb-5">
+            <span class="material-symbols-outlined text-on-primary-fixed">eco</span>
+          </div>
+          <h3 class="font-headline text-xl font-bold mb-2" data-lang="paddy_guide">Paddy Guide</h3>
+          <p class="text-on-surface-variant text-sm">Complete lifecycle management for rice cultivation from nursery to harvest.</p>
+        </div>
+        <button class="text-primary text-xs font-black uppercase tracking-widest mt-4 flex items-center gap-1 w-fit">
+          Read Guide <span class="material-symbols-outlined text-sm">chevron_right</span>
+        </button>
+      </div>
+
+      <!-- Govt Schemes -->
+      <div onclick="openScreen('screen-schemes')" class="bg-secondary-container/30 p-8 rounded-lg bento-card flex flex-col justify-between cursor-pointer">
+        <div>
+          <div class="bg-surface-container-lowest w-12 h-12 rounded-full flex items-center justify-center mb-5">
+            <span class="material-symbols-outlined text-primary">account_balance</span>
+          </div>
+          <h3 class="font-headline text-xl font-bold mb-2" data-lang="schemes">Government Schemes</h3>
+          <p class="text-on-surface-variant text-sm">Check eligibility and apply for PM-Kisan, Fasal Bima, and state subsidies.</p>
+        </div>
+        <div class="flex -space-x-2 mt-4">
+          <div class="w-8 h-8 rounded-full bg-primary-fixed border-2 border-surface flex items-center justify-center text-[10px] font-bold">PM</div>
+          <div class="w-8 h-8 rounded-full bg-secondary-fixed border-2 border-surface flex items-center justify-center text-[10px] font-bold">TN</div>
+          <div class="w-8 h-8 rounded-full bg-tertiary-fixed border-2 border-surface flex items-center justify-center text-[10px] font-bold">+4</div>
+        </div>
+      </div>
+
+      <!-- Cotton Farming -->
+      <div onclick="openScreen('screen-cotton')" class="bg-surface-container-lowest p-8 rounded-lg bento-card flex flex-col justify-between shadow-sm cursor-pointer">
+        <div>
+          <div class="bg-slate-100 w-12 h-12 rounded-full flex items-center justify-center mb-5">
+            <span class="material-symbols-outlined text-slate-800">grass</span>
+          </div>
+          <h3 class="font-headline text-xl font-bold mb-2">Cotton Farming</h3>
+          <p class="text-on-surface-variant text-sm">Advanced pest control and yield optimization for white gold farmers.</p>
+        </div>
+        <div class="progress-track mt-4"><div class="progress-fill bg-secondary w-2/3"></div></div>
+        <span class="text-[10px] text-on-surface-variant mt-1">Growth Season: Mid-Stage</span>
+      </div>
+
+      <!-- EatGood -->
+      <div onclick="openScreen('screen-eatgood')" class="bg-surface-container p-8 rounded-lg bento-card flex flex-col justify-between cursor-pointer">
+        <div>
+          <div class="bg-secondary-fixed w-12 h-12 rounded-full flex items-center justify-center mb-5">
+            <span class="material-symbols-outlined text-on-secondary-fixed">qr_code_scanner</span>
+          </div>
+          <h3 class="font-headline text-xl font-bold mb-2">EatGood</h3>
+          <p class="text-on-surface-variant text-sm">QR-based food transparency: scan to know what's in your packaged food.</p>
+        </div>
+        <span class="ag-chip mt-4">QR Powered</span>
+      </div>
+
+      <!-- AgriFund -->
+      <div class="bg-primary-fixed/40 p-8 rounded-lg bento-card flex flex-col justify-between">
+        <div>
+          <div class="bg-primary w-12 h-12 rounded-full flex items-center justify-center mb-5">
+            <span class="material-symbols-outlined text-on-primary">savings</span>
+          </div>
+          <h3 class="font-headline text-xl font-bold mb-2">AgriFund</h3>
+          <p class="text-on-surface-variant text-sm">Microfinance and loan access for small and marginal farmers.</p>
+        </div>
+        <span class="ag-chip-orange mt-4 text-xs font-bold px-3 py-1 rounded-full inline-block w-fit">Coming Soon</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="px-8 py-12 flex flex-col md:flex-row justify-between items-start gap-8 bg-surface-container rounded-t-[3rem] mt-4">
+    <div class="max-w-xs">
+      <span class="font-headline font-bold text-primary text-2xl mb-3 block">AGRINEXUS</span>
+      <p class="font-label text-sm leading-relaxed text-on-surface opacity-60">Revolutionizing agriculture through technology and data-driven insights. Built for the modern cultivator.</p>
+    </div>
+    <div class="grid grid-cols-2 gap-12">
+      <div class="flex flex-col gap-3">
+        <span class="font-bold text-primary text-xs uppercase tracking-widest mb-2">Resources</span>
+        <a href="aboutus.html" class="font-label text-sm opacity-60 hover:opacity-100 transition-opacity">About Us</a>
+        <a href="aboutus.html" class="font-label text-sm opacity-60 hover:opacity-100 transition-opacity">Contact</a>
+      </div>
+      <div class="flex flex-col gap-3">
+        <span class="font-bold text-primary text-xs uppercase tracking-widest mb-2">Legal</span>
+        <a href="#" class="font-label text-sm opacity-60 hover:opacity-100 transition-opacity">Privacy Policy</a>
+        <a href="#" class="font-label text-sm opacity-60 hover:opacity-100 transition-opacity">Terms of Service</a>
+      </div>
+    </div>
+    <p class="font-label text-sm opacity-60">© 2026 AGRINEXUS. Cultivating the future.</p>
+  </footer>
+</section>
+
+<!-- =================== FARMER LOGIN =================== -->
+<section id="screen-farmer-login" class="screen" style="min-height:100vh;background:linear-gradient(135deg,#012d1d 0%,#1b4332 50%,#012d1d 100%);display:none;position:relative;overflow:hidden;">
+  <!-- Decorative background circles -->
+  <div style="position:absolute;top:-80px;right:-80px;width:320px;height:320px;border-radius:50%;background:rgba(161,244,200,0.06);pointer-events:none;"></div>
+  <div style="position:absolute;bottom:-120px;left:-60px;width:400px;height:400px;border-radius:50%;background:rgba(161,244,200,0.04);pointer-events:none;"></div>
+  <div style="position:absolute;top:50%;left:-100px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,0.03);pointer-events:none;"></div>
+
+  <div class="max-w-lg mx-auto px-6 py-10 relative z-10">
+    <!-- Back button -->
+    <button onclick="openScreen('screen-home')" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);color:#fff;padding:8px 18px;border-radius:9999px;border:none;font-weight:600;font-size:13px;cursor:pointer;margin-bottom:32px;backdrop-filter:blur(8px);transition:background 0.2s;font-family:'Inter',sans-serif;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.12)'">
+      <span class="material-symbols-outlined" style="font-size:16px;">arrow_back</span> Back to Home
+    </button>
+
+    <!-- Brand mark -->
+    <div style="text-align:center;margin-bottom:36px;">
+      <div style="display:inline-flex;align-items:center;justify-content:center;width:72px;height:72px;border-radius:24px;background:rgba(161,244,200,0.15);border:1.5px solid rgba(161,244,200,0.3);margin-bottom:16px;">
+        <span class="material-symbols-outlined" style="font-size:36px;color:#a1f4c8;">agriculture</span>
+      </div>
+      <h1 style="font-family:'Manrope',sans-serif;font-size:2rem;font-weight:800;color:#fff;margin:0 0 6px;">Farmer Login</h1>
+      <p style="color:rgba(161,244,200,0.75);font-size:14px;margin:0;">Secure OTP-based access to your farm dashboard</p>
+    </div>
+
+    <!-- Login card -->
+    <div style="background:rgba(255,255,255,0.97);border-radius:2rem;padding:36px;box-shadow:0 32px 80px rgba(0,0,0,0.3);">
+
+      <!-- Trust badges row -->
+      <div style="display:flex;gap:10px;justify-content:center;margin-bottom:28px;flex-wrap:wrap;">
+        <span style="display:inline-flex;align-items:center;gap:5px;background:#c1ecd4;color:#012d1d;padding:5px 12px;border-radius:9999px;font-size:11px;font-weight:700;">
+          <span class="material-symbols-outlined" style="font-size:13px;">verified_user</span> Secure Login
+        </span>
+        <span style="display:inline-flex;align-items:center;gap:5px;background:#e1e3e2;color:#414844;padding:5px 12px;border-radius:9999px;font-size:11px;font-weight:700;">
+          <span class="material-symbols-outlined" style="font-size:13px;">phone_iphone</span> OTP Verified
+        </span>
+        <span style="display:inline-flex;align-items:center;gap:5px;background:#ffdbcf;color:#3a2017;padding:5px 12px;border-radius:9999px;font-size:11px;font-weight:700;">
+          <span class="material-symbols-outlined" style="font-size:13px;">lock</span> Private & Safe
+        </span>
+      </div>
+      <div style="margin-bottom:20px;">
+         <h3 style="font-weight:800;margin-bottom:10px;">Existing User Login</h3>
+
+         <input id="login-username" class="ag-input" placeholder="Username" style="margin-bottom:10px;" />
+         <input id="login-password" type="password" class="ag-input" placeholder="Password" />
+
+          <button class="ag-btn w-full" onclick="loginUser()" style="margin-top:12px;">
+            Login
+           </button>
+      </div>
+
+      <hr style="margin:20px 0;">
+      <h4 style="text-align:center;">OR</h4>
+
+      <label style="display:block;font-weight:700;font-size:13px;color:#414844;margin-bottom:6px;font-family:'Inter',sans-serif;" data-lang="enter_mobile">Mobile Number</label>
+      <div style="position:relative;">
+        <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:14px;font-weight:700;color:#012d1d;font-family:'Inter',sans-serif;">+91</span>
+        <input class="ag-input" id="farmer-mobile" type="tel" maxlength="10" placeholder="Enter 10-digit number" style="padding-left:46px;" onkeydown="if(event.key==='Enter') sendOTP()"/>
+      </div>
+
+      <button class="ag-btn w-full" onclick="sendOTP()" data-lang="send_otp" style="margin-top:18px;padding:14px 20px;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px;border-radius:9999px;">
+        <span class="material-symbols-outlined" style="font-size:18px;">send</span> Send OTP
+      </button>
+
+      <!-- Divider -->
+      <div style="display:flex;align-items:center;gap:12px;margin:20px 0;">
+        <div style="flex:1;height:1px;background:#e1e3e2;"></div>
+        <span style="font-size:11px;color:#717973;font-weight:600;">FARMER BENEFITS</span>
+        <div style="flex:1;height:1px;background:#e1e3e2;"></div>
+      </div>
+
+      <!-- Feature bullets -->
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:34px;height:34px;border-radius:10px;background:#c1ecd4;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <span class="material-symbols-outlined" style="font-size:17px;color:#012d1d;">trending_up</span>
+          </div>
+          <div>
+            <p style="font-size:13px;font-weight:700;color:#191c1c;margin:0;">Live Market Prices</p>
+            <p style="font-size:11px;color:#717973;margin:0;">Track commodity rates across mandis</p>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:34px;height:34px;border-radius:10px;background:#e1f5ee;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <span class="material-symbols-outlined" style="font-size:17px;color:#116c4a;">inventory_2</span>
+          </div>
+          <div>
+            <p style="font-size:13px;font-weight:700;color:#191c1c;margin:0;">Manage Your Stock</p>
+            <p style="font-size:11px;color:#717973;margin:0;">List produce and connect with buyers</p>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:34px;height:34px;border-radius:10px;background:#ffdbcf;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <span class="material-symbols-outlined" style="font-size:17px;color:#3a2017;">account_balance</span>
+          </div>
+          <div>
+            <p style="font-size:13px;font-weight:700;color:#191c1c;margin:0;">Government Schemes</p>
+            <p style="font-size:11px;color:#717973;margin:0;">PM-Kisan, Fasal Bima & more</p>
+          </div>
+        </div>
+      </div>
+
+      <p style="text-align:center;font-size:12px;color:#717973;margin:0;">New farmer? Login first, then register your profile.</p>
+    </div>
+
+    <!-- Bottom note -->
+    <p style="text-align:center;color:rgba(255,255,255,0.45);font-size:11px;margin-top:20px;">By continuing you agree to AGRINEXUS Terms of Service</p>
+  </div>
+</section>
+
+<!-- =================== OTP SCREEN =================== -->
+<section id="screen-otp" class="screen" style="min-height:100vh;background:linear-gradient(135deg,#012d1d 0%,#1b4332 50%,#012d1d 100%);display:none;position:relative;overflow:hidden;">
+  <div style="position:absolute;top:-80px;right:-80px;width:320px;height:320px;border-radius:50%;background:rgba(161,244,200,0.06);pointer-events:none;"></div>
+  <div style="position:absolute;bottom:-120px;left:-60px;width:400px;height:400px;border-radius:50%;background:rgba(161,244,200,0.04);pointer-events:none;"></div>
+
+  <div class="max-w-lg mx-auto px-6 py-10 relative z-10">
+    <button onclick="openScreen('screen-farmer-login')" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.12);color:#fff;padding:8px 18px;border-radius:9999px;border:none;font-weight:600;font-size:13px;cursor:pointer;margin-bottom:32px;backdrop-filter:blur(8px);font-family:'Inter',sans-serif;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.12)'">
+      <span class="material-symbols-outlined" style="font-size:16px;">arrow_back</span> Change Number
+    </button>
+
+    <div style="text-align:center;margin-bottom:36px;">
+      <div style="display:inline-flex;align-items:center;justify-content:center;width:72px;height:72px;border-radius:24px;background:rgba(161,244,200,0.15);border:1.5px solid rgba(161,244,200,0.3);margin-bottom:16px;">
+        <span class="material-symbols-outlined" style="font-size:36px;color:#a1f4c8;">verified</span>
+      </div>
+      <h1 style="font-family:'Manrope',sans-serif;font-size:2rem;font-weight:800;color:#fff;margin:0 0 6px;" data-lang="otp_verification">OTP Verification</h1>
+      <p id="otp-mobile-hint" style="color:rgba(161,244,200,0.75);font-size:14px;margin:0;">Enter the OTP sent to your mobile</p>
+    </div>
+
+    <div style="background:rgba(255,255,255,0.97);border-radius:2rem;padding:36px;box-shadow:0 32px 80px rgba(0,0,0,0.3);">
+
+      <!-- OTP demo hint -->
+      <div id="otp-display-box" style="background:#c1ecd4;border-radius:1rem;padding:14px 18px;font-size:14px;color:#012d1d;margin-bottom:20px;font-weight:700;text-align:center;border:1.5px dashed #86d7ad;"></div>
+
+      <!-- OTP digit boxes -->
+      <label style="display:block;font-weight:700;font-size:13px;color:#414844;margin-bottom:10px;font-family:'Inter',sans-serif;" data-lang="enter_otp">Enter 6-Digit OTP</label>
+      <input class="ag-input" id="otp-input" type="number" placeholder="e.g. 123456" maxlength="6" style="font-size:22px;font-weight:800;letter-spacing:8px;text-align:center;" onkeydown="if(event.key==='Enter') verifyOTP()"/>
+      <div id="register-form" style="display:none; margin-top:20px;">
+  
+          <label style="font-weight:700;font-size:13px;">Create Username</label>
+          <input id="new-username" class="ag-input" placeholder="Enter username" />
+
+          <label style="font-weight:700;font-size:13px;margin-top:10px;">Create Password</label>
+          <input id="new-password" type="password" class="ag-input" placeholder="Enter password" />
+
+          <button class="ag-btn w-full" onclick="registerUser()" style="margin-top:12px;">
+                Register Account
+          </button>
+
+</div>
+      <!-- Timer bar -->
+      <div style="margin:12px 0 4px;display:flex;align-items:center;justify-content:space-between;">
+        <div id="otp-timer" style="font-size:12px;color:#717973;font-weight:600;font-family:'Inter',sans-serif;"></div>
+        <button onclick="openScreen('screen-farmer-login')" style="background:none;border:none;font-size:12px;color:#012d1d;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;text-decoration:underline;">Resend OTP</button>
+      </div>
+
+      <button class="ag-btn w-full" onclick="verifyOTP()" data-lang="verify" style="margin-top:14px;padding:14px 20px;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px;border-radius:9999px;">
+        <span class="material-symbols-outlined" style="font-size:18px;">login</span> Verify & Login
+      </button>
+
+      <!-- Security note -->
+      <div style="display:flex;align-items:center;gap:8px;margin-top:20px;padding:12px 14px;background:#f3f4f3;border-radius:1rem;">
+        <span class="material-symbols-outlined" style="font-size:16px;color:#717973;">info</span>
+        <p style="font-size:11px;color:#717973;margin:0;line-height:1.5;">Never share your OTP with anyone. AGRINEXUS will never ask for your OTP.</p>
+      </div>
+    </div>
+
+    <p style="text-align:center;color:rgba(255,255,255,0.45);font-size:11px;margin-top:20px;">Secure login powered by AGRINEXUS</p>
+  </div>
+</section>
+
+<!-- =================== FARMER DASHBOARD =================== -->
+<section id="screen-farmer-dashboard" class="screen px-6 md:px-12 py-8 max-w-4xl mx-auto">
+  <button class="ag-back-btn" onclick="openScreen('screen-home')">
+    <span class="material-symbols-outlined text-sm">arrow_back</span> Home
+  </button>
+  <h2 class="ag-section-title mb-1" data-lang="farmer_dashboard">Farmer Dashboard</h2>
+  <p class="text-on-surface-variant text-sm mb-8">Welcome back! Manage your farm operations below.</p>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+    <div onclick="openScreen('screen-farmer-register')" class="bg-primary text-on-primary p-7 rounded-lg bento-card cursor-pointer flex flex-col gap-3">
+      <div class="bg-secondary-fixed w-10 h-10 rounded-full flex items-center justify-center">
+        <span class="material-symbols-outlined text-on-secondary-fixed text-xl">person_add</span>
+      </div>
+      <h3 class="font-headline font-bold text-lg" data-lang="register_farmer">Register Farmer</h3>
+      <p class="text-on-primary-container text-sm">Set up your farmer profile with district and village info.</p>
+    </div>
+    <div onclick="openScreen('screen-add-stock')" class="bg-surface-container-low p-7 rounded-lg bento-card cursor-pointer flex flex-col gap-3 hover:bg-surface-container">
+      <div class="bg-secondary-container w-10 h-10 rounded-full flex items-center justify-center">
+        <span class="material-symbols-outlined text-on-secondary-container text-xl">add_box</span>
+      </div>
+      <h3 class="font-headline font-bold text-lg" data-lang="add_stock">Add Stock</h3>
+      <p class="text-on-surface-variant text-sm">List your harvest — crop, quantity, and asking price.</p>
+    </div>
+    <div onclick="openScreen('screen-my-stock')" class="bg-surface-container-lowest p-7 rounded-lg bento-card cursor-pointer flex flex-col gap-3 shadow-sm hover:shadow-md">
+      <div class="bg-primary-fixed w-10 h-10 rounded-full flex items-center justify-center">
+        <span class="material-symbols-outlined text-on-primary-fixed text-xl">inventory_2</span>
+      </div>
+      <h3 class="font-headline font-bold text-lg" data-lang="my_stock">My Stock</h3>
+      <p class="text-on-surface-variant text-sm">View, edit, and manage all your listed produce.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =================== REGISTER FARMER =================== -->
+<section id="screen-farmer-register" class="screen px-6 md:px-12 py-8 max-w-lg mx-auto">
+  <button class="ag-back-btn" onclick="openScreen('screen-farmer-dashboard')">
+    <span class="material-symbols-outlined text-sm">arrow_back</span> Dashboard
+  </button>
+  <div class="ag-card">
+    <h2 class="ag-section-title mb-1" data-lang="register_farmer">Register Farmer</h2>
+    <p class="text-on-surface-variant text-sm mb-4">Complete your farmer profile to start listing produce.</p>
+    <label class="ag-label" data-lang="enter_name">Farmer Name</label>
+    <input class="ag-input" id="reg-name" placeholder="Enter full name"/>
+    <label class="ag-label" data-lang="enter_district">District</label>
+    <select class="ag-input" id="reg-district" onchange="loadTaluks(this.value,'farm')"></select>
+    <label class="ag-label" data-lang="enter_taluk">Taluk</label>
+    <select class="ag-input" id="reg-taluk" onchange="loadVillages(this.value,'farm')"></select>
+    <label class="ag-label" data-lang="enter_village">Village</label>
+    <select class="ag-input" id="reg-village"></select>
+    <input type="text" id="reg-username" placeholder="Username" />
+    <input type="password" id="reg-password" placeholder="Password" />
+    <button class="ag-btn w-full mt-5" onclick="saveFarmer()" data-lang="save">Save Profile</button>
+  </div>
+</section>
+
+<!-- =================== ADD STOCK =================== -->
+<section id="screen-add-stock" class="screen px-6 md:px-12 py-8 max-w-lg mx-auto">
+  <button class="ag-back-btn" onclick="openScreen('screen-farmer-dashboard')">
+    <span class="material-symbols-outlined text-sm">arrow_back</span> Dashboard
+  </button>
+  <div class="ag-card">
+    <h2 class="ag-section-title mb-1" data-lang="add_stock">Add Stock</h2>
+    <p class="text-on-surface-variant text-sm mb-4">List your harvest so buyers can find you.</p>
+    <label class="ag-label">Crop</label>
+    <select class="ag-input" id="stock-crop">
+      <option>Paddy</option><option>Tomato</option><option>Onion</option><option>Chilli</option>
+    </select>
+    <label class="ag-label">Quantity</label>
+    <input class="ag-input" type="number" id="stock-qty" placeholder="e.g. 500"/>
+    <label class="ag-label">Unit</label>
+    <select class="ag-input" id="stock-unit"><option>kg</option><option>ton</option></select>
+    <label class="ag-label">Price per unit (₹)</label>
+    <input class="ag-input" type="number" id="stock-price" placeholder="e.g. 25"/>
+    <button class="ag-btn w-full mt-5" onclick="saveStock()">Add to Marketplace</button>
+  </div>
+</section>
+
+<!-- =================== MY STOCK =================== -->
+<section id="screen-my-stock" class="screen px-6 md:px-12 py-8 max-w-2xl mx-auto">
+  <button class="ag-back-btn" onclick="openScreen('screen-farmer-dashboard')">
+    <span class="material-symbols-outlined text-sm">arrow_back</span> Dashboard
+  </button>
+  <h2 class="ag-section-title mb-1" data-lang="my_stock">My Stock</h2>
+  <p class="text-on-surface-variant text-sm mb-6">All your listed produce in one place.</p>
+  <div id="my-stock-list"></div>
+</section>
+
+<!-- =================== BUYER VIEW =================== -->
+<section id="screen-buyer-view" class="screen px-6 md:px-12 py-8 max-w-3xl mx-auto">
+  <button class="ag-back-btn" onclick="openScreen('screen-home')">
+    <span class="material-symbols-outlined text-sm">arrow_back</span> Home
+  </button>
+  <h2 class="ag-section-title mb-1" data-lang="buyer_view">Buyer View</h2>
+  <p class="text-on-surface-variant text-sm mb-6">Filter and browse available farm produce by location.</p>
+  <div class="ag-card mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div>
+        <label class="ag-label" data-lang="filter_district">District</label>
+        <select class="ag-input" id="buyer-district" onchange="loadTaluks(this.value,'buyer')"></select>
+      </div>
+      <div>
+        <label class="ag-label" data-lang="filter_taluk">Taluk</label>
+        <select class="ag-input" id="buyer-taluk" onchange="loadVillages(this.value,'buyer')"></select>
+      </div>
+      <div>
+        <label class="ag-label" data-lang="filter_village">Village</label>
+        <select class="ag-input" id="buyer-village"></select>
+      </div>
+      <div>
+        <label class="ag-label">Sort by Price</label>
+        <select class="ag-input" id="price-sort">
+          <option value="">Default</option>
+          <option value="low">Lowest First</option>
+          <option value="high">Highest First</option>
+        </select>
+      </div>
+    </div>
+    <button class="ag-btn mt-4" onclick="filterStock()" data-lang="search">Search Produce</button>
+  </div>
+  <div id="buyer-stock-list"></div>
+</section>
+
+<!-- =================== MARKET PRICES =================== -->
+<section id="screen-market" class="screen px-6 md:px-12 py-8 max-w-3xl mx-auto">
+  <button class="ag-back-btn" onclick="openScreen('screen-home')">
+    <span class="material-symbols-outlined text-sm">arrow_back</span> Home
+  </button>
+  <div class="flex items-center gap-3 mb-6">
+    <h2 class="ag-section-title" data-lang="market_price">Market Prices</h2>
+    <span class="ag-chip flex items-center gap-1"><span class="w-2 h-2 bg-secondary rounded-full pulse-dot inline-block"></span> Live</span>
+  </div>
+  <div id="market-price-table"></div>
+  <canvas id="marketChart" height="120" style="margin-top:20px;"></canvas>
+</section>
+
+<!-- =================== WEATHER =================== -->
+<section id="screen-weather" class="screen" style="background:#f0f2ee;min-height:100vh;">
+  <div class="max-w-6xl mx-auto px-6 md:px-10 py-8">
+
+    <!-- Back + crop selector row -->
+    <div class="flex flex-wrap items-center gap-3 mb-8">
+      <button class="ag-back-btn mb-0" onclick="openScreen('screen-home')">
+        <span class="material-symbols-outlined text-sm">arrow_back</span> Home
+      </button>
+      <div class="flex gap-2 flex-wrap ml-auto items-center">
+        <select class="ag-input" id="weather-crop" style="width:auto;padding:8px 36px 8px 14px;margin-top:0;" onchange="if(window._lastWeatherData) renderWeatherDashboard(window._lastWeatherData)">
+          <option value="Paddy">Paddy</option>
+          <option value="Cotton">Cotton</option>
+          <option value="Tomato">Tomato</option>
+          <option value="Onion">Onion</option>
+          <option value="Chilli">Chilli</option>
+        </select>
+        <button class="ag-btn" style="margin-top:0;" onclick="detectLocationAndFetchWeather()">
+          <span class="material-symbols-outlined align-middle text-sm">my_location</span> Refresh Location
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading state -->
+    <div id="weather-loading" class="text-center py-24" style="display:none;">
+      <div class="inline-block w-14 h-14 rounded-full border-4 border-primary border-t-transparent animate-spin mb-4"></div>
+      <p class="text-on-surface-variant font-medium">Detecting your location & fetching weather…</p>
+    </div>
+
+    <!-- Error state -->
+    <div id="weather-error" style="display:none;" class="ag-card text-center py-12">
+      <span class="material-symbols-outlined text-5xl text-error block mb-3">cloud_off</span>
+      <p class="font-bold text-lg mb-2">Couldn't load weather data</p>
+      <p class="text-on-surface-variant text-sm mb-5" id="weather-error-msg">Please allow location access and try again.</p>
+      <button class="ag-btn" onclick="detectLocationAndFetchWeather()">Try Again</button>
+    </div>
+
+    <!-- Dashboard (hidden until data loads) -->
+    <div id="weather-dashboard" style="display:none;">
+
+      <!-- TOP: Location badge + big temp + soil moisture -->
+      <div class="flex flex-wrap gap-6 mb-6 items-start">
+        <div class="flex-1 min-w-[260px]">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="ag-chip text-xs tracking-widest uppercase pulse-dot" style="background:#a1f4c8;color:#002113;">LIVE ADVISORY</span>
+            <span class="text-sm text-on-surface-variant" id="wx-location-line">Detecting location…</span>
+          </div>
+          <div class="font-headline font-black text-primary" id="wx-big-temp" style="font-size:5.5rem;line-height:1;letter-spacing:-3px;">--°C</div>
+          <div class="flex items-center gap-3 mt-3">
+            <span class="material-symbols-outlined text-3xl text-primary" id="wx-icon-sym">partly_cloudy_day</span>
+            <span class="font-bold text-lg" id="wx-condition">Loading…</span>
+          </div>
+        </div>
+        <!-- Soil moisture card -->
+        <div class="ag-card" style="min-width:280px;flex:0 0 auto;">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Soil Moisture</span>
+            <span class="font-headline font-black text-2xl text-primary" id="wx-soil">--</span>
+          </div>
+          <div class="progress-track" style="height:10px;background:#e1e3e2;border-radius:9999px;overflow:hidden;">
+            <div class="progress-fill" id="wx-soil-bar" style="height:10px;width:0%;background:linear-gradient(90deg,#3a2017,#012d1d,#116c4a);border-radius:9999px;transition:width 1s ease;"></div>
+          </div>
+          <p class="text-xs text-on-surface-variant mt-3 leading-relaxed" id="wx-soil-note">Optimal levels for maize and millet varieties in your current region.</p>
+        </div>
+      </div>
+
+      <!-- ROW 2: Farming Advice + Precipitation bar chart + Weather Factors donut -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
+
+        <!-- Farming Advice (dark card) -->
+        <div class="md:col-span-1 rounded-[1.5rem] p-7 flex flex-col gap-5" style="background:#1b4332;color:#fff;">
+          <div class="flex items-center gap-3 mb-1">
+            <span class="material-symbols-outlined text-secondary-fixed">agriculture</span>
+            <h3 class="font-headline font-bold text-lg" style="color:#a1f4c8;">Farming Advice</h3>
+          </div>
+          <div id="wx-advice-list" class="flex flex-col gap-5"></div>
+        </div>
+
+        <!-- Precipitation bar chart -->
+        <div class="ag-card flex flex-col">
+          <p class="font-headline font-bold text-base mb-1">Precipitation</p>
+          <p class="text-xs text-on-surface-variant mb-4">Next 12 Hours Forecast</p>
+          <div class="flex items-end gap-2 flex-1" id="wx-precip-bars" style="min-height:100px;"></div>
+          <div class="mt-4 pt-3" style="border-top:1px solid #e1e3e2;">
+            <p class="font-bold text-sm" id="wx-precip-summary">Loading…</p>
+            <p class="text-xs text-on-surface-variant" id="wx-precip-sub"></p>
+          </div>
+        </div>
+
+        <!-- Weather Factors donut -->
+        <div class="ag-card flex flex-col">
+          <p class="font-headline font-bold text-base mb-1">Weather Factors</p>
+          <p class="text-xs text-on-surface-variant mb-4">Current Breakdown</p>
+          <div class="flex justify-center mb-4">
+            <svg width="130" height="130" viewBox="0 0 42 42" id="wx-donut">
+              <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#e1e3e2" stroke-width="6"/>
+              <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#012d1d" stroke-width="6" stroke-dasharray="70 30" stroke-dashoffset="25" id="wx-d1"/>
+              <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#116c4a" stroke-width="6" stroke-dasharray="15 85" stroke-dashoffset="-45" id="wx-d2"/>
+              <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#e9bdae" stroke-width="6" stroke-dasharray="15 85" stroke-dashoffset="-60" id="wx-d3"/>
+            </svg>
+          </div>
+          <div class="text-xs flex flex-col gap-2" id="wx-donut-legend">
+            <div class="flex justify-between"><span class="flex items-center gap-2"><span class="inline-block w-3 h-3 rounded-full" style="background:#012d1d;"></span>Humidity</span><strong id="wx-leg-humidity">--</strong></div>
+            <div class="flex justify-between"><span class="flex items-center gap-2"><span class="inline-block w-3 h-3 rounded-full" style="background:#116c4a;"></span>Cloud Cover</span><strong id="wx-leg-cloud">--</strong></div>
+            <div class="flex justify-between"><span class="flex items-center gap-2"><span class="inline-block w-3 h-3 rounded-full" style="background:#e9bdae;"></span>Other</span><strong id="wx-leg-other">--</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 3: 4 metric cards -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div class="ag-card">
+          <span class="material-symbols-outlined text-on-surface-variant mb-2 block">air</span>
+          <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-1">Wind Speed</p>
+          <p class="font-headline font-black text-2xl text-primary" id="wx-wind">--</p>
+          <p class="text-xs text-on-surface-variant mt-1" id="wx-wind-dir">--</p>
+        </div>
+        <div class="ag-card">
+          <span class="material-symbols-outlined text-on-surface-variant mb-2 block">water_drop</span>
+          <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-1">Humidity</p>
+          <p class="font-headline font-black text-2xl text-primary" id="wx-humidity">--</p>
+          <p class="text-xs text-on-surface-variant mt-1" id="wx-humidity-sub">--</p>
+        </div>
+        <div class="ag-card">
+          <span class="material-symbols-outlined text-on-surface-variant mb-2 block">wb_sunny</span>
+          <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-1">UV Index</p>
+          <p class="font-headline font-black text-2xl text-primary" id="wx-uv">--</p>
+          <p class="text-xs text-on-surface-variant mt-1" id="wx-uv-sub">--</p>
+        </div>
+        <div class="ag-card">
+          <span class="material-symbols-outlined text-on-surface-variant mb-2 block">visibility</span>
+          <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-1">Visibility</p>
+          <p class="font-headline font-black text-2xl text-primary" id="wx-visibility">--</p>
+          <p class="text-xs text-on-surface-variant mt-1" id="wx-vis-sub">--</p>
+        </div>
+      </div>
+
+      <!-- ROW 4: Crop Vulnerability -->
+      <div class="mb-2 flex justify-between items-center">
+        <h3 class="font-headline font-bold text-2xl text-primary">Crop Vulnerability</h3>
+        <button class="text-secondary font-bold text-sm flex items-center gap-1" onclick="openScreen('screen-paddy-guide')">Manage My Crops <span class="material-symbols-outlined text-sm">arrow_forward</span></button>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="wx-crop-cards"></div>
+
+    </div><!-- /weather-dashboard -->
+  </div>
+</section>
+
+<!-- =================== PADDY GUIDE =================== -->
+<section id="screen-paddy-guide" class="screen px-6 md:px-12 py-8 max-w-2xl mx-auto">
+  <button class="ag-back-btn" onclick="openScreen('screen-home')">
+    <span class="material-symbols-outlined text-sm">arrow_back</span> Home
+  </button>
+  <h2 class="ag-section-title mb-1" data-lang="paddy_guide">Paddy Guide</h2>
+  <p class="text-on-surface-variant text-sm mb-6">Explore varieties by state with profit comparison.</p>
+  <div class="ag-card mb-4">
+    <label class="ag-label">Select State</label>
+    <select class="ag-input" id="paddy-state" onchange="loadVarietyOptions()"></select>
+    <label class="ag-label">Select Variety</label>
+    <select class="ag-input" id="paddy-variety" onchange="renderSelectedVariety()"></select>
+  </div>
+  <div id="paddy-varieties"></div>
+</section>
+
+<!-- =================== SCHEMES =================== -->
+<section id="screen-schemes" class="screen" style="min-height:100vh;background:#f0f2ee;display:none;">
+  <div class="max-w-3xl mx-auto px-6 md:px-10 py-8">
+    <button class="ag-back-btn" onclick="openScreen('screen-home')">
+      <span class="material-symbols-outlined text-sm">arrow_back</span> Home
+    </button>
+
+    <!-- Hero banner -->
+    <div style="background:linear-gradient(130deg,#012d1d,#1b4332);border-radius:2rem;padding:32px 30px;margin-bottom:28px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:-30px;right:-30px;width:180px;height:180px;border-radius:50%;background:rgba(161,244,200,0.07);pointer-events:none;"></div>
+      <div style="position:absolute;bottom:-60px;left:40%;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,0.03);pointer-events:none;"></div>
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
+        <div style="width:52px;height:52px;border-radius:16px;background:rgba(161,244,200,0.15);border:1.5px solid rgba(161,244,200,0.3);display:flex;align-items:center;justify-content:center;">
+          <span class="material-symbols-outlined" style="font-size:26px;color:#a1f4c8;">account_balance</span>
+        </div>
+        <div>
+          <h2 style="font-family:'Manrope',sans-serif;font-size:1.6rem;font-weight:800;color:#fff;margin:0 0 2px;" data-lang="schemes">Government Schemes</h2>
+          <p style="color:rgba(161,244,200,0.75);font-size:13px;margin:0;">Central &amp; Tamil Nadu state benefits for farmers</p>
+        </div>
+      </div>
+      <!-- Stats row -->
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:10px 16px;backdrop-filter:blur(6px);">
+          <p style="font-size:20px;font-weight:800;color:#a1f4c8;margin:0;font-family:'Manrope',sans-serif;">6</p>
+          <p style="font-size:11px;color:rgba(255,255,255,0.65);margin:0;">Active Schemes</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:10px 16px;backdrop-filter:blur(6px);">
+          <p style="font-size:20px;font-weight:800;color:#a1f4c8;margin:0;font-family:'Manrope',sans-serif;">₹6K+</p>
+          <p style="font-size:11px;color:rgba(255,255,255,0.65);margin:0;">Annual Benefit</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:10px 16px;backdrop-filter:blur(6px);">
+          <p style="font-size:20px;font-weight:800;color:#a1f4c8;margin:0;font-family:'Manrope',sans-serif;">2</p>
+          <p style="font-size:11px;color:rgba(255,255,255,0.65);margin:0;">State Programs</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter chips -->
+    <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;" id="scheme-filter-row">
+      <button onclick="filterSchemes('all')" id="sf-all" style="padding:7px 18px;border-radius:9999px;border:none;cursor:pointer;font-weight:700;font-size:12px;background:#012d1d;color:#fff;font-family:'Inter',sans-serif;transition:all 0.2s;">All</button>
+      <button onclick="filterSchemes('Central Scheme')" id="sf-central" style="padding:7px 18px;border-radius:9999px;border:1.5px solid #c1c8c2;cursor:pointer;font-weight:700;font-size:12px;background:#fff;color:#414844;font-family:'Inter',sans-serif;transition:all 0.2s;">Central</button>
+      <button onclick="filterSchemes('Tamil Nadu State Scheme')" id="sf-state" style="padding:7px 18px;border-radius:9999px;border:1.5px solid #c1c8c2;cursor:pointer;font-weight:700;font-size:12px;background:#fff;color:#414844;font-family:'Inter',sans-serif;transition:all 0.2s;">Tamil Nadu</button>
+      <button onclick="filterSchemes('Tamil Nadu State Subsidy')" id="sf-subsidy" style="padding:7px 18px;border-radius:9999px;border:1.5px solid #c1c8c2;cursor:pointer;font-weight:700;font-size:12px;background:#fff;color:#414844;font-family:'Inter',sans-serif;transition:all 0.2s;">Subsidies</button>
+    </div>
+
+    <!-- Scheme list (enhanced) -->
+    <div id="scheme-list"></div>
+
+    <!-- How to apply guide -->
+    <div style="background:#fff;border-radius:1.5rem;padding:24px;box-shadow:0 2px 16px rgba(0,0,0,0.05);margin-top:8px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <span class="material-symbols-outlined" style="font-size:22px;color:#012d1d;">help_outline</span>
+        <h3 style="font-family:'Manrope',sans-serif;font-size:1.1rem;font-weight:800;color:#012d1d;margin:0;">How to Apply</h3>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:#012d1d;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;font-family:'Inter',sans-serif;">1</div>
+          <div><p style="font-size:13px;font-weight:700;color:#191c1c;margin:0 0 2px;">Visit the official portal</p><p style="font-size:12px;color:#717973;margin:0;">Click "Visit Portal" on any scheme card below</p></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:#012d1d;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;font-family:'Inter',sans-serif;">2</div>
+          <div><p style="font-size:13px;font-weight:700;color:#191c1c;margin:0 0 2px;">Check eligibility</p><p style="font-size:12px;color:#717973;margin:0;">Read the eligibility criteria listed on each card</p></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:#012d1d;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;font-family:'Inter',sans-serif;">3</div>
+          <div><p style="font-size:13px;font-weight:700;color:#191c1c;margin:0 0 2px;">Submit documents</p><p style="font-size:12px;color:#717973;margin:0;">Keep Aadhaar, land records, and bank details ready</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== COTTON =================== -->
+<section id="screen-cotton" class="screen px-6 md:px-12 py-8 max-w-4xl mx-auto">
+  <button class="ag-back-btn" onclick="openScreen('screen-home')">
+    <span class="material-symbols-outlined text-sm">arrow_back</span> Home
+  </button>
+  <h2 class="ag-section-title mb-1">Cotton Farming</h2>
+  <p class="text-on-surface-variant text-sm mb-8">Complete cotton cultivation tools and resources.</p>
+  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+    <div onclick="openScreen('screen-cotton-buyer')" class="bg-surface-container-lowest p-6 rounded-lg bento-card cursor-pointer flex flex-col items-center gap-3 shadow-sm text-center">
+      <div class="bg-tertiary-fixed w-12 h-12 rounded-full flex items-center justify-center">
+        <span class="material-symbols-outlined text-on-tertiary-fixed">shopping_basket</span>
+      </div>
+      <span class="font-bold text-sm">Cotton Buyer</span>
+    </div>
+    <div onclick="openScreen('screen-cotton-weather')" class="bg-surface-container-low p-6 rounded-lg bento-card cursor-pointer flex flex-col items-center gap-3 text-center">
+      <div class="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center">
+        <span class="material-symbols-outlined text-blue-800">thunderstorm</span>
+      </div>
+      <span class="font-bold text-sm">Weather</span>
+    </div>
+    <div onclick="openScreen('screen-cotton-market')" class="bg-surface-container p-6 rounded-lg bento-card cursor-pointer flex flex-col items-center gap-3 text-center">
+      <div class="bg-secondary-container w-12 h-12 rounded-full flex items-center justify-center">
+        <span class="material-symbols-outlined text-on-secondary-container">trending_up</span>
+      </div>
+      <span class="font-bold text-sm">Market Price</span>
+    </div>
+    <div onclick="openScreen('screen-cotton-guide')" class="bg-primary-fixed/40 p-6 rounded-lg bento-card cursor-pointer flex flex-col items-center gap-3 text-center">
+      <div class="bg-primary-fixed w-12 h-12 rounded-full flex items-center justify-center">
+        <span class="material-symbols-outlined text-on-primary-fixed">eco</span>
+      </div>
+      <span class="font-bold text-sm">Guide</span>
+    </div>
+    <div onclick="openScreen('screen-cotton-schemes')" class="bg-secondary-container/30 p-6 rounded-lg bento-card cursor-pointer flex flex-col items-center gap-3 text-center">
+      <div class="bg-surface-container-lowest w-12 h-12 rounded-full flex items-center justify-center">
+        <span class="material-symbols-outlined text-primary">account_balance</span>
+      </div>
+      <span class="font-bold text-sm">Schemes</span>
+    </div>
+  </div>
+</section>
+
+<!-- Cotton Buyer -->
+<section id="screen-cotton-buyer" class="screen px-6 md:px-12 py-8 max-w-3xl mx-auto">
+  <button class="ag-back-btn" onclick="openScreen('screen-cotton')">
+    <span class="material-symbols-outlined text-sm">arrow_back</span> Cotton
+  </button>
+  <h2 class="ag-section-title mb-6">Cotton Buyer Marketplace</h2>
+  <div class="ag-card mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div>
+        <label class="ag-label">District</label>
+        <select class="ag-input" id="cotton-district" onchange="loadTaluks(this.value,'buyer')"></select>
+      </div>
+      <div>
+        <label class="ag-label">Taluk</label>
+        <select class="ag-input" id="cotton-taluk" onchange="loadVillages(this.value,'buyer')"></select>
+      </div>
+      <div>
+        <label class="ag-label">Village</label>
+        <select class="ag-input" id="cotton-village"></select>
+      </div>
+    </div>
+    <button class="ag-btn mt-4" onclick="filterCottonStock()">Search</button>
+  </div>
+  <div id="cotton-stock-list"></div>
+</section>
+
+<!-- Cotton Weather -->
+<section id="screen-cotton-weather" class="screen px-6 md:px-12 py-8 max-w-lg mx-auto">
+  <button class="ag-back-btn" onclick="openScreen('screen-cotton')">
+    <span class="material-symbols-outlined text-sm">arrow_back</span> Cotton
+  </button>
+  <div class="ag-card">
+    <div class="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+      <span class="material-symbols-outlined text-blue-800">thunderstorm</span>
+    </div>
+    <h2 class="ag-section-title mb-4">Cotton Weather Advisory</h2>
+    <div class="space-y-3">
+      <div class="flex gap-3 items-start"><span class="material-symbols-outlined text-primary text-lg mt-0.5">thermostat</span><p class="text-sm">Cotton requires warm temperatures between <strong>21°C–30°C</strong> for optimal growth.</p></div>
+      <div class="flex gap-3 items-start"><span class="material-symbols-outlined text-primary text-lg mt-0.5">water_drop</span><p class="text-sm"><strong>Avoid heavy rainfall</strong> during the flowering stage to prevent boll rot.</p></div>
+      <div class="flex gap-3 items-start"><span class="material-symbols-outlined text-primary text-lg mt-0.5">wb_sunny</span><p class="text-sm">Best grown in <strong>Kharif season</strong> (June–September) with adequate sunlight.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Cotton Market -->
+<section id="screen-cotton-market" class="screen px-6 md:px-12 py-8 max-w-lg mx-auto">
+  <button class="ag-back-btn" onclick="openScreen('screen-cotton')">
+    <span class="material-symbols-outlined text-sm">arrow_back</span> Cotton
+  </button>
+  <div class="ag-card">
+    <h2 class="ag-section-title mb-4">Cotton Market Price</h2>
+    <div class="bg-primary-fixed/40 rounded-xl p-5 text-center">
+      <p class="text-3xl font-headline font-black text-primary">₹6,500 – ₹7,500</p>
+      <p class="text-sm text-on-surface-variant mt-1">Per Quintal (MSP 2024–25)</p>
+    </div>
+    <p class="text-sm text-on-surface-variant mt-4">Prices vary by quality (staple length, grade). Check local APMC for live rates.</p>
+  </div>
+</section>
+
+<!-- Cotton Guide -->
+<section id="screen-cotton-guide" class="screen px-6 md:px-12 py-8 max-w-lg mx-auto">
+  <button class="ag-back-btn" onclick="openScreen('screen-cotton')">
+    <span class="material-symbols-outlined text-sm">arrow_back</span> Cotton
+  </button>
+  <div class="ag-card">
+    <h2 class="ag-section-title mb-5">Cotton Cultivation Guide</h2>
+    <div class="space-y-4">
+      <div class="paddy-card-agri flex gap-3 items-center"><span class="material-symbols-outlined text-primary">terrain</span><div><p class="font-bold text-sm">Best Soil</p><p class="text-xs text-on-surface-variant">Black cotton soil (Vertisol)</p></div></div>
+      <div class="paddy-card-agri flex gap-3 items-center"><span class="material-symbols-outlined text-primary">calendar_month</span><div><p class="font-bold text-sm">Season</p><p class="text-xs text-on-surface-variant">Kharif (June – October)</p></div></div>
+      <div class="paddy-card-agri flex gap-3 items-center"><span class="material-symbols-outlined text-primary">schedule</span><div><p class="font-bold text-sm">Duration</p><p class="text-xs text-on-surface-variant">150–180 days</p></div></div>
+      <div class="paddy-card-agri flex gap-3 items-center"><span class="material-symbols-outlined text-primary">thermostat</span><div><p class="font-bold text-sm">Temperature</p><p class="text-xs text-on-surface-variant">20°C – 30°C optimal</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Cotton Schemes -->
+<section id="screen-cotton-schemes" class="screen px-6 md:px-12 py-8 max-w-lg mx-auto">
+  <button class="ag-back-btn" onclick="openScreen('screen-cotton')">
+    <span class="material-symbols-outlined text-sm">arrow_back</span> Cotton
+  </button>
+  <h2 class="ag-section-title mb-5">Cotton Farming Schemes</h2>
+  <div class="scheme-card-agri mb-3"><strong class="font-bold block mb-1">PMFBY Crop Insurance</strong><p class="text-sm text-on-surface-variant">Pradhan Mantri Fasal Bima Yojana – covers natural calamity losses on cotton crop.</p></div>
+  <div class="scheme-card-agri mb-3"><strong class="font-bold block mb-1">Seed Subsidy Programs</strong><p class="text-sm text-on-surface-variant">State-wise BT cotton seed subsidy for registered farmers.</p></div>
+  <div class="scheme-card-agri"><strong class="font-bold block mb-1">Drip Irrigation Subsidy</strong><p class="text-sm text-on-surface-variant">Micro-irrigation subsidy up to 55% under PMKSY for cotton growers.</p></div>
+</section>
+
+<!-- =================== EatGood =================== -->
+<section id="screen-eatgood" class="screen px-6 md:px-12 py-8 max-w-2xl mx-auto">
+  <button class="ag-back-btn" onclick="openScreen('screen-home')">
+    <span class="material-symbols-outlined text-sm">arrow_back</span> Home
+  </button>
+  <h2 class="ag-section-title mb-1">EatGood – QR Food Transparency</h2>
+  <p class="text-on-surface-variant text-sm mb-8">Know what's really in your food. Producers generate, consumers scan.</p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <div onclick="openScreen('screen-eatgood-producer')" class="bg-primary text-on-primary p-8 rounded-lg bento-card cursor-pointer flex flex-col gap-4">
+      <div class="bg-secondary-fixed w-12 h-12 rounded-full flex items-center justify-center">
+        <span class="material-symbols-outlined text-on-secondary-fixed">qr_code</span>
+      </div>
+      <h3 class="font-headline text-xl font-bold">Producer Portal</h3>
+      <p class="text-on-primary-container text-sm">Generate a QR code with full ingredient and batch details.</p>
+      <span class="mt-auto flex items-center gap-2 font-bold text-sm">Get Started <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
+    </div>
+    <div onclick="openScreen('screen-eatgood-consumer')" class="bg-surface-container-low p-8 rounded-lg bento-card cursor-pointer flex flex-col gap-4 hover:bg-surface-container">
+      <div class="bg-secondary-container w-12 h-12 rounded-full flex items-center justify-center">
+        <span class="material-symbols-outlined text-on-secondary-container">qr_code_scanner</span>
+      </div>
+      <h3 class="font-headline text-xl font-bold">Consumer Scanner</h3>
+      <p class="text-on-surface-variant text-sm">Scan a product QR code and get personalized health analysis.</p>
+      <span class="mt-auto flex items-center gap-2 font-bold text-sm text-primary">Start Scanning <span class="material-symbols-outlined text-sm">arrow_forward</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- EatGood Producer -->
+<section id="screen-eatgood-producer" class="screen px-6 md:px-12 py-8 max-w-lg mx-auto">
+  <button class="ag-back-btn" onclick="openScreen('screen-eatgood')">
+    <span class="material-symbols-outlined text-sm">arrow_back</span> EatGood
+  </button>
+  <div class="ag-card">
+    <h2 class="ag-section-title mb-5">Producer Portal</h2>
+    <label class="ag-label">Manufacturing Date</label>
+    <input class="ag-input" type="date" id="eg-mfd"/>
+    <label class="ag-label">Expiry Date</label>
+    <input class="ag-input" type="date" id="eg-exp"/>
+    <label class="ag-label">Batch ID</label>
+    <input class="ag-input" type="text" id="eg-batch" placeholder="e.g. BATCH2024-A"/>
+    <label class="ag-label">Brand Name</label>
+    <input class="ag-input" type="text" id="eg-brand" placeholder="e.g. FreshBite"/>
+    <label class="ag-label">Ingredients (Sugar:18g,Salt:2g,PalmOil:10g)</label>
+    <input class="ag-input" type="text" id="eg-ingredients" placeholder="Ingredient:amount,..."/>
+    <button class="ag-btn w-full mt-5" onclick="generateEGQR()">Generate QR Code</button>
+    <div id="eg-output" class="mt-4 text-sm text-on-surface-variant font-mono"></div>
+    <div class="flex justify-center mt-4"><img id="eg-qr"  style="display:none;max-width:200px;"/></div>
+  </div>
+</section>
+
+<!-- EatGood Consumer -->
+<section id="screen-eatgood-consumer" class="screen px-6 md:px-12 py-8 max-w-lg mx-auto">
+  <button class="ag-back-btn" onclick="stopScanner(); openScreen('screen-eatgood')">
+    <span class="material-symbols-outlined text-sm">arrow_back</span> EatGood
+  </button>
+  <h2 class="ag-section-title mb-5">Consumer Scanner</h2>
+
+  <div id="health-modal" class="ag-card mb-5" style="display:none;">
+    <h3 class="font-headline font-bold text-lg mb-2">Personalize Your Scan</h3>
+    <p class="text-sm text-on-surface-variant mb-4">Select your health conditions for customized analysis.</p>
+    <div class="grid grid-cols-2 gap-3">
+      <label class="flex items-center gap-2 cursor-pointer bg-surface-container-low p-3 rounded-xl"><input type="checkbox" id="temp-diabetes" class="accent-primary"/> Diabetes</label>
+      <label class="flex items-center gap-2 cursor-pointer bg-surface-container-low p-3 rounded-xl"><input type="checkbox" id="temp-bp" class="accent-primary"/> BP Issues</label>
+      <label class="flex items-center gap-2 cursor-pointer bg-surface-container-low p-3 rounded-xl"><input type="checkbox" id="temp-vegan" class="accent-primary"/> Vegan</label>
+      <label class="flex items-center gap-2 cursor-pointer bg-surface-container-low p-3 rounded-xl"><input type="checkbox" id="temp-weightloss" class="accent-primary"/> Weight Loss</label>
+    </div>
+    <button class="ag-btn w-full mt-5" onclick="continueToScan()">Start Smart Scan</button>
+  </div>
+
+  <div id="qr-reader" class="rounded-xl overflow-hidden" style="display:none;"></div>
+
+  <div id="eg-decoded" class="ag-card mt-4" style="display:none;"></div>
+  <div id="eg-health" class="ag-card mt-4" style="display:none;"></div>
+</section>
+
+</div><!-- end screens wrapper -->
+
+<!-- end screens wrapper -->
+
+<!-- SCRIPTS -->
+<script src="js/data.js"></script>
+<script src="js/language.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+// 📲 SEND OTP
+function sendOTP() {
+    const mobile = document.getElementById("farmer-mobile").value;
+
+    fetch("http://127.0.0.1:5000/send-otp", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ mobile })
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message);
+
+        // Move to OTP screen
+        openScreen('screen-otp');
+
+        // Show mobile hint
+        document.getElementById("otp-mobile-hint").innerText =
+            "OTP sent to +91 " + mobile;
+    })
+    .catch(err => console.error(err));
+}
+
+
+// ✅ VERIFY OTP
+function verifyOTP() {
+    const mobile = document.getElementById("farmer-mobile").value;
+    const otp = document.getElementById("otp-input").value;
+
+    fetch("http://127.0.0.1:5000/verify-otp", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ mobile, otp })
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message);
+
+        if (data.message === "OTP verified") {
+            openScreen('screen-farmer-dashboard');
+        }
+    })
+    .catch(err => console.error(err));
+}
+function registerUser() {
+    const username = document.getElementById("new-username").value;
+    const password = document.getElementById("new-password").value;
+    const mobile = document.getElementById("farmer-mobile").value;
+
+    fetch("/register", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ username, password, mobile })
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message);
+
+        if (data.message === "User registered successfully") {
+          
+            openScreen('screen-farmer-dashboard');
+        }
+    })
+    .catch(err => console.error(err));
+}
+function loginUser() {
+  const username = document.getElementById("login-username").value;
+  const password = document.getElementById("login-password").value;
+
+  fetch("http://127.0.0.1:5000/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    credentials: "include",
+    body: JSON.stringify({
+      username: username,
+      password: password
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      alert("Login successful");
+      window.location.href = "http://127.0.0.1:5000/dashboard";
+    } else {
+      alert("Invalid credentials");
+    }
+  });
+}
+function logoutFarmer(){
+    window.location.href = "file:///C:/Users/selva/OneDrive/Desktop/agrinexus%20(1)/agrinexus/index.html";
+
+}
+function saveFarmer() {
+  const username = document.getElementById("reg-username").value;
+  const password = document.getElementById("reg-password").value;
+  const name     = document.getElementById("reg-name").value;
+  const district = document.getElementById("reg-district").value;
+  const taluk    = document.getElementById("reg-taluk").value;
+  const village  = document.getElementById("reg-village").value;
+
+  // Basic validation
+  if (!username || !password) {
+    alert("Username and Password are required!");
+    return;
+  }
+
+  fetch("http://127.0.0.1:5000/register-farmer", {
+    method: "POST",
+    credentials: "include",   // 🔥 REQUIRED for session (OTP)
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      username: username,
+      password: password,
+      name: name,
+      district: district,
+      taluk: taluk,
+      village: village
+    })
+  })
+  .then(async (res) => {
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Registration failed");
+    }
+
+    return data;
+  })
+  .then((data) => {
+    console.log("SUCCESS:", data);
+    alert(data.message);
+
+    // Optional: redirect after success
+    // window.location.href = "login.html";
+  })
+  .catch((err) => {
+    console.error("ERROR:", err);
+    alert(err.message);
+  });
+}
+</script>
+
+</body>
+</html>

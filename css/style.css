@@ -1,0 +1,49 @@
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;}
+.glass-nav{backdrop-filter:blur(20px);background:rgba(249,249,248,0.92);}
+.bento-card{transition:transform 0.3s ease,background-color 0.3s ease,box-shadow 0.3s ease;}
+.bento-card:hover{transform:translateY(-4px);box-shadow:0 24px 48px rgba(1,45,29,0.08);}
+.screen{display:none;}
+.screen.active{display:block !important;}
+.ag-input{width:100%;padding:10px 14px;margin-top:6px;background:#f3f4f3;border:none;border-radius:1rem;font-size:14px;font-family:'Inter',sans-serif;color:#191c1c;outline:none;transition:background 0.2s;}
+.ag-input:focus{background:#fff;box-shadow:0 0 0 2px rgba(1,45,29,0.15);}
+.ag-label{display:block;margin-top:14px;font-weight:600;font-size:13px;color:#414844;font-family:'Inter',sans-serif;}
+.ag-btn{margin-top:12px;padding:10px 20px;border:none;background:#012d1d;color:#fff;font-weight:700;border-radius:9999px;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif;}
+.ag-btn:hover{background:#1b4332;transform:scale(0.97);}
+.ag-btn-secondary{background:#f3f4f3;color:#012d1d;}
+.ag-btn-secondary:hover{background:#edeeed;}
+.ag-btn-danger{background:#ba1a1a;}
+.ag-btn-danger:hover{background:#93000a;}
+.ag-card{background:#fff;border-radius:1.25rem;padding:18px;box-shadow:0 4px 24px rgba(0,0,0,0.05);margin-bottom:12px;}
+.ag-section-title{font-family:'Manrope',sans-serif;font-size:1.5rem;font-weight:800;color:#012d1d;margin-bottom:4px;}
+.ag-back-btn{display:inline-flex;align-items:center;gap:6px;background:#f3f4f3;color:#012d1d;padding:8px 16px;border-radius:9999px;cursor:pointer;border:none;font-weight:600;font-size:13px;margin-bottom:20px;transition:background 0.2s;font-family:'Inter',sans-serif;}
+.ag-back-btn:hover{background:#edeeed;}
+.ag-chip{display:inline-block;background:#a1f4c8;color:#002113;padding:3px 12px;border-radius:9999px;font-size:11px;font-weight:700;letter-spacing:.04em;}
+.ag-chip-orange{background:#ffdbcf;color:#3a2017;}
+.ag-chip-red{background:#ffdad6;color:#93000a;}
+.stock-card-agri{background:#fff;border-radius:1.25rem;padding:16px 18px;box-shadow:0 2px 16px rgba(0,0,0,0.05);margin-bottom:10px;border-left:4px solid #a1f4c8;}
+.stock-card-best{border-left-color:#012d1d;}
+.modal-overlay{position:fixed;inset:0;background:rgba(25,28,28,0.4);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.modal-box{background:#fff;border-radius:2rem;padding:32px;max-width:420px;width:90%;box-shadow:0 32px 64px rgba(0,0,0,0.12);}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:#012d1d;color:#fff;padding:12px 28px;border-radius:9999px;font-weight:600;font-size:14px;z-index:999;opacity:0;transition:opacity 0.3s;pointer-events:none;font-family:'Inter',sans-serif;}
+.toast.show{opacity:1;}
+select.ag-input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23414844' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;}
+.paddy-card-agri{background:#f3f4f3;border-radius:1.25rem;padding:16px 18px;margin-bottom:10px;}
+.badge-green{background:#c1ecd4;color:#012d1d;padding:4px 14px;border-radius:9999px;font-size:12px;font-weight:700;display:inline-block;}
+.badge-orange{background:#ffdbcf;color:#3a2017;padding:4px 14px;border-radius:9999px;font-size:12px;font-weight:700;display:inline-block;}
+.scheme-card-agri{background:#fff;border-radius:1.25rem;padding:18px;box-shadow:0 2px 16px rgba(0,0,0,0.05);margin-bottom:12px;}
+.market-row{background:#fff;border-radius:1rem;padding:14px 18px;margin-bottom:10px;box-shadow:0 2px 10px rgba(0,0,0,0.04);}
+.progress-track{height:8px;background:#edeeed;border-radius:9999px;overflow:hidden;margin-top:6px;}
+.progress-fill{height:8px;border-radius:9999px;transition:width 0.5s ease;}
+.otp-hint{background:#c1ecd4;border-radius:1rem;padding:10px 14px;font-size:13px;color:#012d1d;margin-top:8px;font-weight:600;}
+@keyframes pulse-dot{0%,100%{opacity:1;}50%{opacity:0.4;}}
+.pulse-dot{animation:pulse-dot 1.5s ease-in-out infinite;}
+.full {
+  animation: colorChange 30s infinite;
+}
+@keyframes colorChange {
+  0%   { background-color: #FFDFBE; }
+  25%  { background-color: rgb(218, 255, 191); }
+  50%  { background-color: rgb(213, 228, 255); }
+  75%  { background-color: rgb(203, 203, 255); }
+  100% { background-color: #FFDFBE; }
+}
