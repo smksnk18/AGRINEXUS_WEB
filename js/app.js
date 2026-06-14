@@ -45,7 +45,7 @@ function saveFarmer() {
   openScreen("screen-farmer-dashboard");
 }
 async function loadMarketFromAPI() {
-  const res = await fetch("http://localhost:5000/market-prices");
+  const res = await fetch("/market-prices");
   const data = await res.json();
 
   renderMarket(data);
@@ -241,7 +241,7 @@ async function renderMarketPrices() {
   let apiData = [];
 
   try {
-    const res = await fetch("http://localhost:5000/market-prices");
+    const res = await fetch("/market-prices");
     apiData = await res.json();
   } catch (e) {
     console.log("API failed, using fallback");
@@ -593,7 +593,7 @@ async function renderSchemes() {
   list.innerHTML = "Loading...";
 
   try {
-    const res = await fetch("http://localhost:5000/schemes");
+    const res = await fetch("/schemes");
     const data = await res.json();
 
     console.log("Schemes data:", data); // debug
