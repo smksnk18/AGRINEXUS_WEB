@@ -5,7 +5,8 @@ from flask_bcrypt import Bcrypt
 from twilio.rest import Client
 import random
 import os
-from flask import send_from_directory
+from flask import send_from_directory,send_file
+
 
 
 
@@ -20,8 +21,9 @@ app.config["SESSION_COOKIE_SECURE"] = False  # keep False for local
 # ------------------ DB CONNECTION ------------------
 
 try:
+    MONGO_URI = os.getenv("MONGO_URI")
     mongo_client = MongoClient(
-        "mongodb+srv://smksnk:methun%402007@cluster0.sx2akqk.mongodb.net/agrinexus_db?retryWrites=true&w=majority",
+        MONGO_URI,
         serverSelectionTimeoutMS=5000
     )
     mongo_client.admin.command('ping')
@@ -34,9 +36,17 @@ except Exception as e:
 # ------------------ TWILIO CONFIG ------------------
 
 # ⚠️ Use environment variables in real deployment
+<<<<<<< HEAD
 account_sid = os.getenv("TWILIO_SID", "ACe12ed6ba4837e137ff05ed02535a63c5")
 auth_token = os.getenv("TWILIO_AUTH", "72b3ce2a9335f744784e169fccefb0ae")
 twilio_number = "+1 385 403 8753"
+=======
+
+
+account_sid = os.getenv("TWILIO_SID")
+auth_token = os.getenv("TWILIO_AUTH")
+twilio_number = os.getenv("TWILIO_NUMBER")
+>>>>>>> 770b5c40277c50c1ea4afd5f9911f6cd1e8ae025
 
 client_twilio = Client(account_sid, auth_token)
 
@@ -48,7 +58,7 @@ otp_store = {}
 
 @app.route("/app")
 def serve_app():
-    return send_from_directory(".", "index.html")
+    return send_file("index.html")
 @app.route("/logout")
 def logout():
     session.pop("username", None)
@@ -265,12 +275,20 @@ def market_prices():
     return jsonify(data)
 
 # ------------------ HOME ------------------
-
 @app.route("/")
 def home():
-    return "🚀 AgriNexus Server Running!"
+    return send_file("index.html")
+@app.route('/css/<path:filename>')
+def css_files(filename):
+    return send_from_directory('css', filename)
 
+@app.route('/js/<path:filename>')
+def js_files(filename):
+    return send_from_directory('js', filename)
 # ------------------ RUN ------------------
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 5000))
+    )
