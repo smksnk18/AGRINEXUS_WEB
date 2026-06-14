@@ -643,11 +643,6 @@ async function renderSchemes() {
       const color = typeColor[type] || '#414844';
       const icon  = typeIcons[type] || 'account_balance';
 
-      // Live Dictionary Check for Dynamic Cards Text
-      const displayBenefitLabel = _currentLanguageState === 'ta' ? 'பலன்:' : 'Benefit:';
-      const displayEligibilityLabel = _currentLanguageState === 'ta' ? 'தகுதி:' : 'Eligibility:';
-      const displayBtnText = _currentLanguageState === 'ta' ? 'வலைத்தளத்திற்குச் செல்லவும்' : 'Visit Portal';
-
       list.innerHTML += `
       <div style="background:#fff;border-radius:1.5rem;padding:22px;box-shadow:0 2px 16px rgba(0,0,0,0.05);margin-bottom:14px;border-left:4px solid ${bg};">
         
@@ -665,13 +660,13 @@ async function renderSchemes() {
         </div>
 
         <div style="margin-bottom:14px;">
-          <p><strong>${displayBenefitLabel}</strong> ${benefit}</p>
-          <p><strong>${displayEligibilityLabel}</strong> ${eligibility}</p>
+          <p><strong>Benefit:</strong> ${benefit}</p>
+          <p><strong>Eligibility:</strong> ${eligibility}</p>
         </div>
 
         <a href="${link}" target="_blank"
            style="display:inline-block;padding:8px 14px;background:#0a5c36;color:#fff;border-radius:8px;text-decoration:none;font-size:13px;">
-           ${displayBtnText}
+           Visit Portal
         </a>
 
       </div>`;
@@ -769,12 +764,8 @@ function analyzeHealth(ingredientStr) {
 }
 
 // =================== INIT ===================
-
 document.addEventListener("DOMContentLoaded", () => {
-  // Automatically check for or default to English language states
-  const savedLanguage = localStorage.getItem('agrinexus_language') || 'en';
-  liveTranslateUI(savedLanguage);
-  
+  applyLanguage();
   const session = localStorage.getItem("session");
   if (session === "farmer") { updateNavForLogin(); }
 });
@@ -874,35 +865,4 @@ function renderCottonVariety() {
 
     </div>
   `;
-}
-// =================== LIVE TRANSLATION ENGINE ===================
-let _currentLanguageState = 'en';
-
-function liveTranslateUI(selectedLang) {
-  // 1. Store language preference in local storage to keep pages unified
-  _currentLanguageState = selectedLang;
-  localStorage.setItem('agrinexus_language', selectedLang);
-
-  // 2. Scan and translate permanent text with [data-key] indicators
-  const translatableElements = document.querySelectorAll('[data-key]');
-  translatableElements.forEach(element => {
-    const translationKey = element.getAttribute('data-key');
-    if (LANG[selectedLang] && LANG[selectedLang][translationKey]) {
-      element.innerText = LANG[selectedLang][translationKey];
-    }
-  });
-
-  // 3. Highlight the active language pill button visually in your header
-  const enBtn = document.getElementById('lang-btn-en');
-  const taBtn = document.getElementById('lang-btn-ta');
-  if (enBtn && taBtn) {
-    enBtn.classList.toggle('active', selectedLang === 'en');
-    taBtn.classList.toggle('active', selectedLang === 'ta');
-  }
-
-  // 4. Force dynamic sections like schemes to immediately re-render in the new language
-  const schemeContainer = document.getElementById("scheme-list");
-  if (schemeContainer && schemeContainer.innerHTML !== "" && schemeContainer.innerHTML !== "Loading...") {
-    renderSchemes();
-  }
 }

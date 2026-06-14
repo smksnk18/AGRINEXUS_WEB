@@ -45,8 +45,8 @@ tailwind.config = {
   <div class="flex items-center gap-8">
     <span onclick="openScreen('screen-home')" class="font-headline font-black tracking-tighter text-primary text-2xl uppercase cursor-pointer">AGRINEXUS</span>
     <nav class="hidden md:flex items-center gap-2">
-      <button onclick="liveTranslateUI('en')" id="lang-btn-en" class="text-primary font-bold font-label text-sm px-4 py-1 rounded-full transition-all">English</button>
-      <button onclick="liveTranslateUI('ta')" id="lang-btn-ta" class="text-on-surface opacity-60 font-label text-sm px-4 py-1 rounded-full hover:bg-surface-container transition-all">தமிழ்</button>
+      <button onclick="setLanguage('en')" id="btn-lang-en" class="text-primary font-bold font-label text-sm px-4 py-1 rounded-full transition-all">English</button>
+      <button onclick="setLanguage('ta')" id="btn-lang-ta" class="text-on-surface opacity-60 font-label text-sm px-4 py-1 rounded-full hover:bg-surface-container transition-all">தமிழ்</button>
     </nav>
   </div>
   <div id="nav-login-btn">
