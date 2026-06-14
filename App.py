@@ -35,7 +35,7 @@ except Exception as e:
 
 # ⚠️ Use environment variables in real deployment
 account_sid = os.getenv("TWILIO_SID", "ACe12ed6ba4837e137ff05ed02535a63c5")
-auth_token = os.getenv("TWILIO_AUTH", "c014d4a710fe528550d40cb4cef46cac")
+auth_token = os.getenv("TWILIO_AUTH", "72b3ce2a9335f744784e169fccefb0ae")
 twilio_number = "+1 385 403 8753"
 
 client_twilio = Client(account_sid, auth_token)

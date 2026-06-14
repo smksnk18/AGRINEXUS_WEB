@@ -1030,11 +1030,11 @@ tailwind.config = {
 function sendOTP() {
     const mobile = document.getElementById("farmer-mobile").value;
 
-    fetch("http://127.0.0.1:5000/send-otp", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ mobile })
-    })
+    fetch("/send-otp", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ mobile })
+})
     .then(res => res.json())
     .then(data => {
         alert(data.message);
@@ -1055,7 +1055,7 @@ function verifyOTP() {
     const mobile = document.getElementById("farmer-mobile").value;
     const otp = document.getElementById("otp-input").value;
 
-    fetch("http://127.0.0.1:5000/verify-otp", {
+    fetch("/verify-otp", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ mobile, otp })
@@ -1095,7 +1095,7 @@ function loginUser() {
   const username = document.getElementById("login-username").value;
   const password = document.getElementById("login-password").value;
 
-  fetch("http://127.0.0.1:5000/login", {
+  fetch("/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -1130,7 +1130,7 @@ function saveFarmer() {
     return;
   }
 
-  fetch("http://127.0.0.1:5000/register-farmer", {
+  fetch("/register-farmer", {
     method: "POST",
     credentials: "include",   // 🔥 REQUIRED for session (OTP)
     headers: {
