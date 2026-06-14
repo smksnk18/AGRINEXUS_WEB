@@ -36,18 +36,9 @@ except Exception as e:
 # ------------------ TWILIO CONFIG ------------------
 
 # ⚠️ Use environment variables in real deployment
-<<<<<<< HEAD
-account_sid = os.getenv("TWILIO_SID", "ACe12ed6ba4837e137ff05ed02535a63c5")
-auth_token = os.getenv("TWILIO_AUTH", "72b3ce2a9335f744784e169fccefb0ae")
-twilio_number = "+1 385 403 8753"
-=======
-
-
 account_sid = os.getenv("TWILIO_SID")
 auth_token = os.getenv("TWILIO_AUTH")
 twilio_number = os.getenv("TWILIO_NUMBER")
->>>>>>> 770b5c40277c50c1ea4afd5f9911f6cd1e8ae025
-
 client_twilio = Client(account_sid, auth_token)
 
 # ------------------ OTP STORAGE ------------------
