@@ -45,6 +45,7 @@ client_twilio = Client(account_sid, auth_token)
 
 otp_store = {}
 
+
 # ------------------ LOGOUT ------------------
 
 @app.route("/app")

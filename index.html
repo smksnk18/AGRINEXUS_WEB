@@ -1110,7 +1110,7 @@ function loginUser() {
   .then(data => {
     if (data.success) {
       alert("Login successful");
-      window.location.href = "file:///C:/Users/selva/OneDrive/Desktop/agrinexus%20(1)/agrinexus/dashboard.html";
+      openScreen("screen-farmer-dashboard");
     } else {
       alert("Invalid credentials");
     }
