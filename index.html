@@ -1110,7 +1110,7 @@ function loginUser() {
   .then(data => {
     if (data.success) {
       alert("Login successful");
-      openScreen("screen-farmer-dashboard");
+      window.location.href = "/dashboard";
     } else {
       alert("Invalid credentials");
     }

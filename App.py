@@ -47,6 +47,9 @@ otp_store = {}
 
 
 # ------------------ LOGOUT ------------------
+@app.route("/dashboard")
+def dashboard_page():
+    return send_file("dashboard.html")
 @app.route("/aboutus.html")
 def aboutus():
     return send_file("aboutus.html")
