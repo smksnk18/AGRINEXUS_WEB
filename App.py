@@ -47,7 +47,9 @@ otp_store = {}
 
 
 # ------------------ LOGOUT ------------------
-
+@app.route("/aboutus.html")
+def aboutus():
+    return send_file("aboutus.html")
 @app.route("/app")
 def serve_app():
     return send_file("index.html")
